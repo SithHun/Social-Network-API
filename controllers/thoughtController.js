@@ -51,9 +51,16 @@ module.exports = {
 
   async deleteThought(req, res) {
     try {
-      // Code for deleting a thought
+      const { id } = req.params;
+      const deletedThought = await Thought.findByIdAndRemove(id);
+      if (!deletedThought) {
+        return res.status(404).json({ message: 'Thought not found.' });
+      }
+      // Remove thought from associated user's thoughts array
+      await User.updateMany({}, { $pull: { thoughts: id } });
+      res.json({ message: 'Thought deleted successfully.' });
     } catch (error) {
-      // Error handling
+      res.status(400).json({ error: 'Failed to delete the thought.' });
     }
   },
 
