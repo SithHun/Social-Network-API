@@ -26,17 +26,26 @@ module.exports = {
 
   async createThought(req, res) {
     try {
-      // Code for creating a new thought
+      const { thoughtText, username, userId } = req.body;
+      const thought = await Thought.create({ thoughtText, username });
+      await User.findByIdAndUpdate(userId, { $push: { thoughts: thought._id }});
+      res.status(201).json(thought);
     } catch (error) {
-      // Error handling
+      res.status(400).json({ error: 'Failed to create a new thought.' });
     }
   },
 
   async updateThought(req, res) {
     try {
-      // Code for updating a thought
+      const { id } = req.params;
+      const { thoughtText } = req.body;
+      const updatedThought = await Thought.findByIdAndUpdate(id, { thoughtText }, { new: true });
+      if (!updatedThought) {
+        return res.status(404).json({ message: 'Thought cannot be found with this ID.' });
+      }
+      res.json(updatedThought);
     } catch (error) {
-      // Error handling
+      res.status(400).json({ error: 'Failed to update the thought with this ID.' });
     }
   },
 
