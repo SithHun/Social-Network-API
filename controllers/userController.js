@@ -63,17 +63,31 @@ module.exports = {
 
   async addFriend(req, res) {
     try {
-      
+      const { userId, friendId } = req.params;
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { $addToSet: { friends: friendId } },
+        { new: true }
+      );
+      if (!user) {
+        return res.status(400).json({ message: 'User not found.' });
+      }
+      res.json(user);
     } catch (error) {
-      // Error handling
+      res.status(400).json({ error: 'Failed to add a friend.' });
     }
   },
 
   async removeFriend(req, res) {
     try {
-      // Code for removing a friend
+      const { userId, friendId } = req.params;
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { $pull: { friends: friendId } },
+        { new: true }
+      );
     } catch (error) {
-      // Error handling
+      res.status(400).json({ error: 'Failed to remove the friend.' });
     }
   },
 };
