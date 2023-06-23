@@ -39,6 +39,7 @@ module.exports = {
       const { id } = req.params;
       const { username, email } = req.body;
       const updatedUser = await User.findByIdAndUpdate(id, { username, email }, { new: true });
+      res.json(updatedUser);
     } catch (error) {
       res.status(400).json({ error: 'Failed to update the user with this ID.' });
     }
@@ -86,6 +87,7 @@ module.exports = {
         { $pull: { friends: friendId } },
         { new: true }
       );
+      res.json(user)
     } catch (error) {
       res.status(400).json({ error: 'Failed to remove the friend.' });
     }
