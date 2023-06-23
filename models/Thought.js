@@ -28,8 +28,13 @@ const thoughtSchema = new Schema(
   }
 );
 
-thoughtSchema.virtual('timeStamp').get(function (){
+thoughtSchema.set('toObject', { getters: true }); // Enable getters when converting to a plain JavaScript object
+thoughtSchema.set('toJSON', { getters: true }); // Enable getters when converting to JSON
+
+
+thoughtSchema.virtual('created').get(function (){
     const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    const createdAt = new Date(this.createdAt);
     return this.createdAt.toLocaleDateString(undefined, options);
 })
 

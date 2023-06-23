@@ -16,7 +16,7 @@ module.exports = {
       const { id } = req.params;
       const thought = await Thought.findById(id);
       if (!thought) {
-        res.status(404).json({ message: 'Cannot find thought with this ID.' });
+        return res.status(404).json({ message: 'Cannot find thought with this ID.' });
       }
       res.json(thought);
     } catch (error) {
@@ -28,8 +28,8 @@ module.exports = {
     try {
       const { thoughtText, username, userId } = req.body;
       const thought = await Thought.create({ thoughtText, username });
-      await User.findByIdAndUpdate(userId, { $push: { thoughts: thought._id }});
-      res.status(201).json(thought);
+      const user = await User.findByIdAndUpdate({ _id: userId }, { $push: { thoughts: thought._id}}, { new: true }).populate('thoughts', '-email');
+      res.status(201).json({ thought, user });
     } catch (error) {
       res.status(400).json({ error: 'Failed to create a new thought.' });
     }

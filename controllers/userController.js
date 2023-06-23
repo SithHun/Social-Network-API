@@ -4,7 +4,7 @@ const Thought = require('../models/Thought');
 module.exports = {
   async getAllUsers(req, res) {
     try {
-      const users = await User.find().populate('thoughts').populate('friends', 'username -_id');
+      const users = await User.find().populate('thoughts', '-username -_id').populate('friends', 'username -_id');
       res.json(users)
     } catch (error) {
       res.status(500).json({ error: 'An error occurred while retrieving all users.' })
@@ -69,7 +69,7 @@ module.exports = {
         userId,
         { $addToSet: { friends: friendId } },
         { new: true }
-      );
+      ).populate('friends', 'username -_id');
       if (!user) {
         return res.status(400).json({ message: 'User not found.' });
       }
