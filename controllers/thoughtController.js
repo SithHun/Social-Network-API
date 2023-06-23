@@ -28,7 +28,7 @@ module.exports = {
     try {
       const { thoughtText, username, userId } = req.body;
       const thought = await Thought.create({ thoughtText, username });
-      const user = await User.findByIdAndUpdate({ _id: userId }, { $push: { thoughts: thought._id}}, { new: true }).populate('thoughts', '-email');
+      const user = await User.findByIdAndUpdate(userId, { $push: { thoughts: thought._id}}, { new: true }).populate('thoughts', '-email');
       res.status(201).json({ thought, user });
     } catch (error) {
       res.status(400).json({ error: 'Failed to create a new thought.' });

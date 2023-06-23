@@ -27,6 +27,9 @@ const reactionSchema = new Schema (
 }
 );
 
+reactionSchema.set('toObject', { getters: true }); // Enable getters when converting to a plain JavaScript object
+reactionSchema.set('toJSON', { getters: true }); // Enable getters when converting to JSON
+
 // reactionSchema.virtual('timestamp').get(function(){
 //     const options = { month: 'long', day: 'numeric', year: 'numeric' }
 //     return this.createdAt.toLocaleDateString(undefined, options);
