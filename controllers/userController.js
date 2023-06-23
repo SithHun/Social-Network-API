@@ -46,15 +46,24 @@ module.exports = {
 
   async deleteUser(req, res) {
     try {
-      // Code for deleting a user
+      const { id } = req.params;
+      const deletedUser = await User.findByIdAndDelete(id);
+      if (!deletedUser) {
+        return res.status(400).json({ message: 'User not found with this ID.' });
+      }
+      // Remove user's associated thoughts if user is deleted
+      await Thought.deleteMany({ username: deletedUser.username });
+      // Remove user from friends' friend lists
+      await User.updateMany({}, { $pull: { friends: id } });
+      res.json({ message: 'User deleted successfully.' });
     } catch (error) {
-      // Error handling
+      res.status(400).json({ error: 'Failed to delete the user.' });
     }
   },
 
   async addFriend(req, res) {
     try {
-      // Code for adding a friend
+      
     } catch (error) {
       // Error handling
     }
