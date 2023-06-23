@@ -66,17 +66,38 @@ module.exports = {
 
   async createReaction(req, res) {
     try {
-      // Code for creating a reaction
+      const { thoughtId } = req.params;
+      const { reactionBody, username } = req.body;
+      const thought = await Thought.findByIdAndUpdate(
+        thoughtId,
+        { $push: { reactions: { reactionBody, username } } },
+        { new: true }
+      );
+      if (!thought) {
+        return res.status(404).json({ message: 'Thought not found.' });
+      }
+      res.json(thought);
     } catch (error) {
-      // Error handling
+      res.status(400).json({ error: 'Failed to create a reaction.' });
     }
   },
 
+
   async deleteReaction(req, res) {
     try {
-      // Code for deleting a reaction
+      const { thoughtId } = req.params;
+      const { reactionId } = req.body;
+      const thought = await Thought.findByIdAndUpdate(
+        thoughtId,
+        { $pull: { reactions: { _id: reactionId } } },
+        { new: true }
+      );
+      if (!thought) {
+        return res.status(404).json({ message: 'Thought not found.' });
+      }
+      res.json(thought);
     } catch (error) {
-      // Error handling
+      res.status(400).json({ error: 'Failed to delete the reaction.' });
     }
-  },
+  }
 };
