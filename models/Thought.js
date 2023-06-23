@@ -12,6 +12,11 @@ const thoughtSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
+      get: function (createdAt) {
+        const options = { month: 'long', day: 'numeric', year: 'numeric' };
+        const formattedDate = new Date(createdAt).toLocaleDateString(undefined, options);
+        return formattedDate;
+      }
     },
     username: {
       type: String,
@@ -32,11 +37,11 @@ thoughtSchema.set('toObject', { getters: true }); // Enable getters when convert
 thoughtSchema.set('toJSON', { getters: true }); // Enable getters when converting to JSON
 
 
-thoughtSchema.virtual('created').get(function (){
-    const options = { month: 'long', day: 'numeric', year: 'numeric' };
-    const createdAt = new Date(this.createdAt);
-    return this.createdAt.toLocaleDateString(undefined, options);
-})
+// thoughtSchema.virtual('created').get(function (){
+//     const options = { month: 'long', day: 'numeric', year: 'numeric' };
+//     const createdAt = new Date(this.createdAt);
+//     return this.createdAt.toLocaleDateString(undefined, options);
+// })
 
 thoughtSchema.virtual('reactionCount').get(function() {
     return this.reactions.length;
