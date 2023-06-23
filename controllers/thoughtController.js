@@ -4,17 +4,23 @@ const User = require('../models/User');
 module.exports = {
   async getAllThoughts(req, res) {
     try {
-      // Code for retrieving all thoughts
+      const thoughts = await Thought.find();
+      res.json(thoughts);
     } catch (error) {
-      // Error handling
+      res.status(500).json({ error: 'An error while retrieving thoughts.' });
     }
   },
 
   async getThoughtById(req, res) {
     try {
-      // Code for retrieving a single thought by id
+      const { id } = req.params;
+      const thought = await Thought.findById(id);
+      if (!thought) {
+        res.status(404).json({ message: 'Cannot find thought with this ID.' });
+      }
+      res.json(thought);
     } catch (error) {
-      // Error handling
+      res.status(500).json({ error: 'An error occurred while retrieving thought with this ID.' });
     }
   },
 
