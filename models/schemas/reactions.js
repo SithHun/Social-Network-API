@@ -17,14 +17,19 @@ const reactionSchema = new Schema (
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
+        get: function (createdAt) {
+            const options = { month: 'long', day: 'numeric', year: 'numeric' };
+            const formattedDate = new Date(createdAt).toLocaleDateString(undefined, options);
+            return formattedDate;
+        }
     },
 }
 );
 
-reactionSchema.virtual('timestamp').get(function(){
-    const options = { month: 'long', day: 'numeric', year: 'numeric' }
-    return this.createdAt.toLocaleDateString(undefined, options);
-});
+// reactionSchema.virtual('timestamp').get(function(){
+//     const options = { month: 'long', day: 'numeric', year: 'numeric' }
+//     return this.createdAt.toLocaleDateString(undefined, options);
+// });
 
 module.exports = reactionSchema;

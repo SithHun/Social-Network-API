@@ -68,9 +68,12 @@ module.exports = {
     try {
       const { thoughtId } = req.params;
       const { reactionBody, username } = req.body;
+
+      const reaction = { reactionBody, username };
+
       const thought = await Thought.findByIdAndUpdate(
         thoughtId,
-        { $push: { reactions: { reactionBody, username } } },
+        { $push: { reactions: reaction } },
         { new: true }
       );
       if (!thought) {

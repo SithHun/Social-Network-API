@@ -4,7 +4,7 @@ const Thought = require('../models/Thought');
 module.exports = {
   async getAllUsers(req, res) {
     try {
-      const users = await User.find().populate('thoughts', '-username -_id').populate('friends', 'username -_id');
+      const users = await User.find().populate('thoughts', '-username -_id -createdAt').populate('friends', 'username -_id');
       return res.json(users)
     } catch (error) {
       res.status(500).json({ error: 'An error occurred while retrieving all users.' })
