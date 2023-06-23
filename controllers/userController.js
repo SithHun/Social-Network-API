@@ -26,17 +26,21 @@ module.exports = {
 
   async createUser(req, res) {
     try {
-      // Code for creating a new user
+      const { username, email } = req.body;
+      const userdbData = await User.create({ username, email });
+      res.json(userdbData)
     } catch (error) {
-      // Error handling
+      res.status(400).json({ error: 'Failed to create new user. Please provide email and username.' })
     }
   },
 
   async updateUser(req, res) {
     try {
-      // Code for updating a user
+      const { id } = req.params;
+      const { username, email } = req.body;
+      const updatedUser = await User.findByIdAndUpdate(id, { username, email }, { new: true });
     } catch (error) {
-      // Error handling
+      res.status(400).json({ error: 'Failed to update the user with this ID.' });
     }
   },
 
