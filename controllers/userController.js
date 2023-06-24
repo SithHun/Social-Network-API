@@ -87,7 +87,7 @@ module.exports = {
         { $pull: { friends: friendId } },
         { new: true }
       );
-      res.json(user)
+      res.json({ message: 'Friend has been successfully deleted!'})
     } catch (error) {
       res.status(400).json({ error: 'Failed to remove the friend.' });
     }
