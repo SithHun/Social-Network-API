@@ -4,7 +4,7 @@ const Thought = require('../models/Thought');
 module.exports = {
   async getAllUsers(req, res) {
     try {
-      const users = await User.find().populate('thoughts', '-username -_id -createdAt').populate('friends', 'username -_id');
+      const users = await User.find().populate('thoughts', '-username -_id -createdAt').populate('friends', 'username');
       return res.json(users)
     } catch (error) {
       res.status(500).json({ error: 'An error occurred while retrieving all users.' })
@@ -14,7 +14,7 @@ module.exports = {
   async getUserById(req, res) {
     try {
       const { id } = req.params;
-      const user = await User.findById(id).populate('thoughts').populate('friends', 'username -_id');
+      const user = await User.findById(id).populate('thoughts').populate('friends', 'username');
       if (!user) {
         return res.status(404).json({ message: 'User not found with that ID.' });
       }

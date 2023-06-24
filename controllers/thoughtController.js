@@ -85,7 +85,6 @@ module.exports = {
     }
   },
 
-
   async deleteReaction(req, res) {
     try {
       const { thoughtId } = req.params;
@@ -98,7 +97,7 @@ module.exports = {
       if (!thought) {
         return res.status(404).json({ message: 'Thought not found.' });
       }
-      res.json(thought);
+      res.json({ message: 'Reaction has been successfully deleted!'});
     } catch (error) {
       res.status(400).json({ error: 'Failed to delete the reaction.' });
     }
